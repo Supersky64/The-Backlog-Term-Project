@@ -5,13 +5,13 @@ const app = express();
 
 const multer = require("multer");
 app.use(multer().none());
-app.use(express.urlencoded({ extended: ture}));
+app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static("public"));
 
 require('dotenv').config();
 
-const session = require('express-sessions');
+const session = require('express-session');
 const passport = require('passport');
 require('./auth/passport');
 app.use(session({
