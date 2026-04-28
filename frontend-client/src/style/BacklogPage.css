@@ -1,0 +1,28 @@
+.page-container {
+  padding: 2rem;
+}
+
+.stats-container {
+  display: flex;
+  gap: 1rem;
+
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  flex: 1;
+
+  background-color: #1e1e1e;
+
+  padding: 1.5rem;
+
+  border-radius: 12px;
+
+  text-align: center;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.stat-card h2 {
+  margin-bottom: 0.5rem;
+}

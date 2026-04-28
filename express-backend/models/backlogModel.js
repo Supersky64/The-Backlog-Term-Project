@@ -7,7 +7,7 @@ async function getAllBacklogEntires(){
     return result.rows;
 }
 
-async function getOneBacklogEntryById() {
+async function getOneBacklogEntryById(id) {
     const queryText = "SELECT * FROM backlog_entries where id = $1";
     const values = [id];
     const result = await pool.query(queryText, values);

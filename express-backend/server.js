@@ -17,7 +17,7 @@ require('./auth/passport');
 app.use(session({
     secret: 'your_secret_key',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -32,10 +32,11 @@ app.use(
     })
 );
 
-//TODO: add routes js from /routes here
 const backlogRoutes = require('./routes/backlogRoutes');
+const gamesRoutes = require('./routes/gamesRoutes');
 
 app.use('/backlog', backlogRoutes);
+app.use('/api/games', gamesRoutes);
 app.use('/auth', require('./auth/authRoute'));
 
 const PORT = process.env.PORT || 3000;

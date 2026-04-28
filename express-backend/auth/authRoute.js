@@ -3,7 +3,7 @@ const passport = require("passport");
 const router = express.Router();
 const userModel = require("../models/userModel");
 
-const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL || 'http://5173';
+const CLIENT_BASE_URL = process.env.CLIENT_BASE_URL || 'http://localhost:5173';
 
 const saveReturnTo = (req, res, next) => {
     const returnTo = req.query.returnTo || '/';
@@ -16,10 +16,7 @@ router.get(
     saveReturnTo,
     passport.authenticate("google", {
         keepSessionInfo: true,
-        scope: [
-            "https://www.googleapis.come/auth/plus.login",
-            "https://www.googleapis.com/auth/userinfo.email",
-        ],
+        scope: ['profile', 'email'],
     })
 );
 
@@ -44,7 +41,7 @@ router.get(
 
 router.get('/me', async (req, res) => {
     if (req.isAuthenticated()) {
-        const user = await userModel.getUserById(req.user.googleid);
+        const user = await userModel.getUserById(req.user.googleId);
         if (user) {
             res.json(user);
         } else {
@@ -61,8 +58,8 @@ router.post('/logout', (req, res) => {
             return res.status(500).json({ message: 'Error logging out' });
         }
         //Destroy the session to clear the session cookie
-        req.session.destory((sessionErr) => {
-            if (session) {
+        req.session.destroy((sessionErr) => {
+            if (sessionErr) {
                 return res.status(500).json({ message: 'Error destroying session' });
             }
             res.status(200).json({ message: 'Logged out successfully' });
