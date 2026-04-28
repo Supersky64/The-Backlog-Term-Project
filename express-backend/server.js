@@ -33,7 +33,9 @@ app.use(
 );
 
 //TODO: add routes js from /routes here
+const backlogRoutes = require('./routes/backlogRoutes');
 
+app.use('/backlog', backlogRoutes);
 app.use('/auth', require('./auth/authRoute'));
 
 const PORT = process.env.PORT || 3000;
