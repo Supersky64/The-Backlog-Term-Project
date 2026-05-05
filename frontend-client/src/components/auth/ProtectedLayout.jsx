@@ -2,7 +2,7 @@ import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from './AuthContext.jsx';
 
 function ProtectedLayout() {
- /*
+ 
   const { isAuthenticated, isLoading } = useAuth(); // <-- Get state
   const location = useLocation();
 
@@ -20,7 +20,7 @@ function ProtectedLayout() {
 
   // 3. Handle the 'authenticated' state
   // We're loaded and authenticated, render the child route
- */
+ 
   return <Outlet />;
 }
 

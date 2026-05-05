@@ -5,13 +5,13 @@ const AUTH_API_BASE_URL =
 
 class AuthService {
   getCurrentUser() {
-    return axios.get(`${AUTH_API_BASE_URL}/user`, {
+    return axios.get(`${AUTH_API_BASE_URL}/me`, {
         withCredentials: true
       });
   }
 
   logout() {
-    return axios.get(`${AUTH_API_BASE_URL}/logout`, {
+    return axios.post(`${AUTH_API_BASE_URL}/logout`, {}, {
         withCredentials: true
       });
   }

@@ -80,7 +80,7 @@ function Navbar() {
 
           <>
             <span>
-              👤 {user.displayName}
+              👤 {user.display_name}
             </span>
 
             <button onClick={handleLogout}>
