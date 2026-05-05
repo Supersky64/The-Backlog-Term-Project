@@ -18,11 +18,17 @@ passport.use(new GoogleStrategy({
     lastName: profile.name.familyName,
     email: profile.emails[0].value
   }
-  const user = await userModel.getUserById(profile.id);
-  if (!user) {
-    userModel.createNewUser(Object.values(newUser));
-  }
-  return done(null, profile);
+  let user = await userModel.getUserByGoogleId(profile.id);
+
+if (!user) {
+  user = await userModel.createNewUser([
+    profile.id,
+    profile.displayName,
+    profile.emails[0].value
+  ]);
+}
+
+return done(null, user); 
 }));
 
 
@@ -32,7 +38,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userModel.getUserById(id); // Fetch from DB
+    const user = await userModel.getOneUserById(id); // Fetch from DB
     done(null, user); // Pass the full user object
   } catch (error) {
     done(error);
