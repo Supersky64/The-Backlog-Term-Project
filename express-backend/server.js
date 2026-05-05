@@ -9,6 +9,7 @@ const cors = require('cors');
 app.use(
     cors({
         origin: process.env.CLIENT_BASE_URL,
+        methods: 'GET,POST,PUT,DELETE',
         credentials: true,
     })
 );
@@ -23,17 +24,14 @@ app.use(express.static("public"));
 const session = require('express-session');
 const passport = require('passport');
 require('./auth/passport');
-
-app.set('trust proxy', 1);
-
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: 'your_secret_key',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: true,
-        sameSite: 'none',
-        httpOnly: true
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax'
     }
 }));
 app.use(passport.initialize());

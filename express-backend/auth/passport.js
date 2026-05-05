@@ -8,7 +8,7 @@ const userModel = require('../models/userModel');
 passport.use(new GoogleStrategy({
   clientID: process.env.clientID,
   clientSecret: process.env.clientSecret,
-  callbackURL: process.env.GOOGLE_CALLBACK_URL
+  callbackURL: 'http://localhost:3000/auth/google/callback'
 }, async (token, tokenSecret, profile, done) => {
 
   const newUser = {
@@ -18,17 +18,11 @@ passport.use(new GoogleStrategy({
     lastName: profile.name.familyName,
     email: profile.emails[0].value
   }
-  let user = await userModel.getUserByGoogleId(profile.id);
-
-if (!user) {
-  user = await userModel.createNewUser([
-    profile.id,
-    profile.displayName,
-    profile.emails[0].value
-  ]);
-}
-
-return done(null, user); 
+  const user = await userModel.getUserById(profile.id);
+  if (!user) {
+    userModel.createNewUser(Object.values(newUser));
+  }
+  return done(null, profile);
 }));
 
 
@@ -38,7 +32,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await userModel.getOneUserById(id); // Fetch from DB
+    const user = await userModel.getUserById(id); // Fetch from DB
     done(null, user); // Pass the full user object
   } catch (error) {
     done(error);

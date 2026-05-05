@@ -12,13 +12,6 @@ async function getOneUserById(id) {
     return result.rows[0];
 }
 
-async function getUserByGoogleId(googleId) {
-    const queryText = "SELECT * FROM users WHERE google_id = $1";
-    const values = [googleId];
-    const result = await pool.query(queryText, values);
-    return result.rows[0];
-}
-
 async function deleteUser(id) {
     let queryText = "DELETE FROM users WHERE id =$1; ";
     const values = [id];
@@ -33,6 +26,12 @@ async function addUser(name, email, password) {
     return result.rows[0];
 }
 
+async function getUserById(googleId) {
+    const queryText = "SELECT * FROM users where google_id= $1";
+    const values = [googleId];
+    const result = await pool.query(queryText, values);
+    return result.rows[0];
+}
 
 async function createNewUser([googleId, displayName, email]) {
     let queryText = "INSERT INTO users ( google_id, display_name, email) VALUES ($1, $2, $3) RETURNING *";
@@ -47,6 +46,6 @@ module.exports = {
     getOneUserById,
     deleteUser,
     addUser,
-    getUserByGoogleId,
+    getUserById,
     createNewUser
 };
