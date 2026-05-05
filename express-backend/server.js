@@ -9,7 +9,6 @@ const cors = require('cors');
 app.use(
     cors({
         origin: process.env.CLIENT_BASE_URL,
-        methods: 'GET,POST,PUT,DELETE',
         credentials: true,
     })
 );
@@ -25,13 +24,13 @@ const session = require('express-session');
 const passport = require('passport');
 require('./auth/passport');
 app.use(session({
-    secret: 'your_secret_key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
         secure: false,
-        sameSite: 'lax'
+        sameSite: 'none'
     }
 }));
 app.use(passport.initialize());
