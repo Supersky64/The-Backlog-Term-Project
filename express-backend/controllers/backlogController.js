@@ -3,7 +3,7 @@ const model = require('../models/backlogModel');
 
 async function fetchAllBacklogEntries(req, res) {
     try {
-        const backlogEntries = await model.getAllBacklogEntires();
+        const backlogEntries = await model.getAllBacklogEntires(req.user.id);
         res.json(backlogEntries);
     } catch (err) {
         console.error(err);
@@ -28,12 +28,13 @@ async function fetchBacklogEntryById(req, res) {
 }
 
 async function createBacklogEntry(req, res) {
+    const user_id = req.user.id;
     const {
         game_id, title, image_url, status, notes} = req.body;
     if (game_id && title && image_url && status) {
         try {
             const newBacklogEntry =
-                await model.addBacklogEntry(game_id, title, image_url, status, notes);
+                await model.addBacklogEntry(user_id, game_id, title, image_url, status, notes);
             res.status(201).json(newBacklogEntry);
         } catch (err) {
             console.error(err);

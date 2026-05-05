@@ -3,18 +3,18 @@ const express = require("express");
 const router = express.Router();
 const backlogController = require('../controllers/backlogController');
 
-const cors = require('cors');
 
-const corsOptions = {
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true
-};
+function ensureAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    return res.status(401).json({ message: "Not authenticated" });
+}
 
-router.use(cors(corsOptions));
 
-router.get("/", backlogController.fetchAllBacklogEntries);
-router.get("/:id", backlogController.fetchBacklogEntryById);
-router.post("/", backlogController.createBacklogEntry);
-router.put("/:id", backlogController.updateBacklogEntry);
-router.delete("/:id", backlogController.removeBacklogEntry);
+router.get("/", ensureAuth, backlogController.fetchAllBacklogEntries);
+router.get("/:id", ensureAuth, backlogController.fetchBacklogEntryById);
+router.post("/", ensureAuth, backlogController.createBacklogEntry);
+router.put("/:id", ensureAuth, backlogController.updateBacklogEntry);
+router.delete("/:id", ensureAuth, backlogController.removeBacklogEntry);
 module.exports = router;

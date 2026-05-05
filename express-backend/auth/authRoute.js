@@ -23,7 +23,6 @@ router.get(
 router.get(
     "/google/callback",
     passport.authenticate("google", {
-        scope: ['profile', 'email'],
         keepSessionInfo: true,
         failureRedirect: `${CLIENT_BASE_URL}/login?error=true`, //Redirect to login on failure
     }),
@@ -35,13 +34,16 @@ router.get(
         delete req.session.returnTo; // Clean up the session
 
         //Redirect the user back to the frontend
-        res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
+        req.session.save(() => {
+            res.redirect(`${CLIENT_BASE_URL}${returnTo}`);
+        })
+
     }
 );
 
 router.get('/me', async (req, res) => {
     if (req.isAuthenticated()) {
-        const user = await userModel.getUserById(req.user.googleId);
+        const user = req.user;
         if (user) {
             res.json(user);
         } else {

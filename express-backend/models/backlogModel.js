@@ -1,9 +1,10 @@
 "use-strict";
 const pool = require('./dbConnection');
 
-async function getAllBacklogEntires(){
-    const queryText = "SELECT * FROM backlog_entries ORDER BY created_at DESC";
-    const result = await pool.query(queryText);
+async function getAllBacklogEntires(user_id){
+    const queryText = "SELECT * FROM backlog_entries WHERE user_id = $1 ORDER BY created_at DESC";
+    const values = [user_id];
+    const result = await pool.query(queryText, values);
     return result.rows;
 }
 
@@ -14,14 +15,14 @@ async function getOneBacklogEntryById(id) {
     return result.rows[0];
 }
 
-async function addBacklogEntry(game_id, title, image_url, status, notes) {
+async function addBacklogEntry(user_id, game_id, title, image_url, status, notes) {
     const queryText = `
-    INSERT INTO backlog_entries ( game_id, title, image_url, status, notes)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO backlog_entries (user_id, game_id, title, image_url, status, notes)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `;
 
-    const values = [game_id, title, image_url, status, notes];
+    const values = [user_id, game_id, title, image_url, status, notes];
     const results = await pool.query(queryText, values);
     return results.rows[0];
 }

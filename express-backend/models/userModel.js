@@ -27,15 +27,15 @@ async function addUser(name, email, password) {
 }
 
 async function getUserById(googleId) {
-    const queryText = "SELECT * FROM users where googleid= $1";
+    const queryText = "SELECT * FROM users where google_id= $1";
     const values = [googleId];
     const result = await pool.query(queryText, values);
     return result.rows[0];
 }
 
-async function createNewUser([googleId, displayName, firstName, lastName, email]) {
-    let queryText = "INSERT INTO users ( googleId, displayName, firstName, lastName, email) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-    let values = [googleId, displayName, firstName, lastName, email];
+async function createNewUser([googleId, displayName, email]) {
+    let queryText = "INSERT INTO users ( google_id, display_name, email) VALUES ($1, $2, $3) RETURNING *";
+    let values = [googleId, displayName, email];
     const result = await pool.query(queryText, values);
     return result.rows[0];
 }

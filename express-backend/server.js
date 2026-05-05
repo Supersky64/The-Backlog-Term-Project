@@ -1,27 +1,9 @@
 //server.js
+require('dotenv').config();
+
 "use strict";
 const express = require("express");
 const app = express();
-
-const multer = require("multer");
-app.use(multer().none());
-app.use(express.urlencoded({ extended: true}));
-app.use(express.json());
-app.use(express.static("public"));
-
-require('dotenv').config();
-
-const session = require('express-session');
-const passport = require('passport');
-require('./auth/passport');
-app.use(session({
-    secret: 'your_secret_key',
-    resave: false,
-    saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
 
 const cors = require('cors');
 app.use(
@@ -31,6 +13,32 @@ app.use(
         credentials: true,
     })
 );
+
+const multer = require("multer");
+app.use(multer().none());
+app.use(express.urlencoded({ extended: true}));
+app.use(express.json());
+app.use(express.static("public"));
+
+
+const session = require('express-session');
+const passport = require('passport');
+require('./auth/passport');
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'lax'
+    }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(express.static("public"));
+
 
 const backlogRoutes = require('./routes/backlogRoutes');
 const gamesRoutes = require('./routes/gamesRoutes');
